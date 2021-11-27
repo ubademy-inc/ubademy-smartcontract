@@ -7,7 +7,7 @@ const fastify = require("fastify")({ logger: true });
 
 // Import Mongo Db
 if (process.env.NODE_ENV !== "test") {
-  require("./config/db");
+  require("./database/db");
 }
 
 // Declares routes

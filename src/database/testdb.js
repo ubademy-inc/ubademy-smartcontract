@@ -14,7 +14,7 @@ class TestDBManager {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     };
-    this.connection = await mongoose.connect(url, config);
+    // this.connection = await mongoose.connect(url, config);
   }
 
   async closeDataBase() {
