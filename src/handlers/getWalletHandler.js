@@ -4,17 +4,17 @@ function schema() {
       type: "object",
       properties: {
         id: {
-          type: "integer",
+          type: "string",
         },
       },
     },
-    required: ["id"],
+    required: ["user"],
   };
 }
 
 function handler({ walletService }) {
   return async function (req, reply) {
-    const body = await walletService.getWalletData(req.params.id);
+    const body = await walletService.getWalletData(req.params.user);
     reply.code(200).send(body);
   };
 }

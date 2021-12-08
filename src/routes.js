@@ -22,6 +22,16 @@ function getWalletsDataRoute({ services, config }) {
   };
 }
 
+// function getWalletsFromUsersRoute({ services, config }) {
+//   return {
+//     method: "GET",
+//     url: "/https://ubademy-grupo-13-usuarios.herokuapp.com/api/users/detail",
+//     schema: getWalletsData.schema(config),
+//     handler: getWalletsData.handler({ config, ...services }),
+//   };
+// }
+
+
 function createWalletRoute({ services, config }) {
   return {
     method: "POST",

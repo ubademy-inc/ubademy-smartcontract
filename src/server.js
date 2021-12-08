@@ -12,3 +12,5 @@ if (process.env.NODE_ENV !== "test") {
 
 // Declares routes
 routes.forEach(route => fastify.route(route({ config, services })));
+
+module.exports = fastify;

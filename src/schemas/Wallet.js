@@ -12,7 +12,7 @@ const walletSchema = new Schema({
   },
   authType: {
     type: String,
-    required: true,
+    // required: true,
   },
   displayName: {
     type: String,
