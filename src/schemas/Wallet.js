@@ -7,7 +7,12 @@ const walletSchema = new Schema({
     required: true,
     unique: true,
   },
-  password: {
+  address:{
+    type:String,
+    required:true,
+    unique:true,
+  },
+  privateKey: {
     type: String,
   },
   authType: {

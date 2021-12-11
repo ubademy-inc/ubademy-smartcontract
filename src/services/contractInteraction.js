@@ -1,10 +1,18 @@
 const ethers = require("ethers");
 const getDepositHandler = require("../handlers/getDepositHandler");
+const Deposit = require("../schemas/Deposits");
 
 const getContract = (config, wallet) => {
   return new ethers.Contract(config.contractAddress, config.contractAbi, wallet);
 };
+class contract {
+  constructor( config){
+    this.contractdb = contractdb;
+    this.config = config;
 
+  }
+
+}
 const deposits = {};
 
 const deposit = ({ config }) => async (senderWallet, amountToSend) => {
@@ -12,15 +20,24 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
   const tx = await basicPayments.deposit({
     value: await ethers.utils.parseEther(amountToSend).toHexString(),
   });
+
   tx.wait(1).then(
     receipt => {
       console.log("Transaction mined");
       const firstEvent = receipt && receipt.events && receipt.events[0];
       console.log(firstEvent);
       if (firstEvent && firstEvent.event == "DepositMade") {
-        deposits[tx.hash] = {
-          senderAddress: firstEvent.args.sender,
-          amountSent: firstEvent.args.amount,
+        let data = new Deposit({
+          sender:tx.from,
+          amount: firstEvent.args.amount,
+          receiver: tx.to,
+          tx: tx.hash,
+          status: "completed"
+        });
+        Deposit.create(data);
+        return {
+          tx_hash: tx.hash,
+          status: status
         };
       } else {
         console.error(`Payment not created in tx ${tx.hash}`);

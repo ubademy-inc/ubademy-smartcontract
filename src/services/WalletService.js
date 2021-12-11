@@ -20,7 +20,7 @@ const createWallet = (req, res) => async (req) => {
   // let data = await this.db.getWallet(req.body.user)
   // if (data){
   //   return {id: data.user,
-  //   address: data.wallet,
+  //   address: data.address,
   //   privateKey: data.privateKey
   //   }
   // }
@@ -31,7 +31,8 @@ const createWallet = (req, res) => async (req) => {
     //create and save wallet
     let walletToSave = new Wallet({
       user: req.body.user,
-      password: wallet.privateKey,
+      address: wallet.address,
+      privateKey: wallet.privateKey,
       authType: "kovan",
       displayName: req.body.displayName,
       isAdmin: req.body.isAdmin
@@ -48,14 +49,16 @@ const createWallet = (req, res) => async (req) => {
       return await Wallet.find();
   }
 
-  const getWalletData = () =>async (address) => {
-    let accounts = await Wallet.findOne(address);
+  const getWalletData = () =>async (user) => {
+    console.log("ESTA EN WALLUET",user,"\n");
+    let accounts = await Wallet.findOne({user: user});
     return accounts;
   }
 
-  const getWallet = ({}) =>async privateKey => {
+  const getWallet = ({}) =>async (user) => {
     const provider = new ethers.providers.InfuraProvider("kovan", process.env.INFURA_API_KEY);
-    return new ethers.Wallet(Wallet.findOne(privateKey), provider);
+    let obtenerwallet = await Wallet.findOne({user: user});
+    return  new ethers.Wallet(obtenerwallet.privateKey, provider);
   }
 
 
