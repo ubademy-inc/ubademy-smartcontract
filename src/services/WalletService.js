@@ -12,7 +12,6 @@ const Wallet = require("../schemas/Wallet");
 const getDeployerWallet = ({ config }) => () => {
     const provider = new ethers.providers.InfuraProvider(config.network, config.infuraApiKey);
     const wallet = ethers.Wallet.fromMnemonic(config.deployerMnemonic).connect(provider);
-    console.log("Deployer wallet" + wallet.address);
     return wallet;
 };
 
@@ -50,7 +49,6 @@ const createWallet = (req, res) => async (req) => {
   }
 
   const getWalletData = () =>async (user) => {
-    console.log("ESTA EN WALLUET",user,"\n");
     let accounts = await Wallet.findOne({user: user});
     return accounts;
   }
@@ -60,10 +58,6 @@ const createWallet = (req, res) => async (req) => {
     let obtenerwallet = await Wallet.findOne({user: user});
     return  new ethers.Wallet(obtenerwallet.privateKey, provider);
   }
-
-
-// }
-// module.exports.WalletService = WalletService
 
 
 
