@@ -6,14 +6,7 @@ const Payments = require("../schemas/Payments");
 const getContract = (config, wallet) => {
   return new ethers.Contract(config.contractAddress, config.contractAbi, wallet);
 };
-class contract {
-  constructor( config){
-    this.contractdb = contractdb;
-    this.config = config;
 
-  }
-
-}
 
 const deposit = ({ config }) => async (senderWallet, amountToSend) => {
   const basicPayments = await getContract(config, senderWallet);
@@ -55,15 +48,13 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
 const sendPayment = ({ config }) => async (receiverWallet, amountToSend, deployerWallet) => {
     const basicPayments = await getContract(config, deployerWallet);
     let amount = await ethers.utils.parseEther(amountToSend).toHexString();
-    const tx = await basicPayments.sendPayment(receiverWallet.address,amount, {gasLimit: 300000});
-
-    tx.wait(1).then(
+    const tx = await basicPayments.sendPayment(receiverWallet.address,amount, {gasLimit: 300000});    tx.wait(1).then(
       receipt => {  
-        console.log("Transaction mined");
+        console.log("Transaction mined", receiverWallet.address, "\n");
         const firstEvent = receipt && receipt.events && receipt.events[0];
         console.log(firstEvent);
         if (firstEvent && firstEvent.event == "PaymentMade") {
-          if (Payments.get(receiverWallet.address) !== null){
+          if (Payments.findOne({receiver: receiverWallet.address}) !== null){
             Payments.updateOne(receiverWallet.address, 
                               {amount: firstEvent.args.amount,
                               tx: tx.hash,
@@ -75,11 +66,11 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToSend, deploye
           }    
           let data = new Payments({
             receiver: tx.to,
-            amount: firstEvent.args.amount,
+            transactions: { amount: firstEvent.args.amount,
             tx: tx.hash,
             status: "completed"
-          });
-          Payments.create(data);
+          }});
+          Payments.create(data); 
           return {
             tx_hash: tx.hash,
             status: "completed"
