@@ -69,7 +69,8 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToSend, deploye
             transactions: { amount: firstEvent.args.amount,
             tx: tx.hash,
             status: "completed"
-          }});
+          }
+        }); 
           Payments.create(data); 
           return {
             tx_hash: tx.hash,
@@ -83,12 +84,12 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToSend, deploye
   return tx;
 };
 const getDepositReceipt = ({}) => async depositTxHash => {
-  return await Deposit.findOne({ tx: depositTxHash });
+  return await Deposit.findOne({transactions: depositTxHash });
 };
 
 const getTransactionsMadeByWallet= ({})=> async wallet => {
-  let depositsMade = await Deposit.findOne({sender: wallet});
-  let paymentsMade = await Deposit.findOne({reciever: wallet});
+  let depositsMade = await Deposits.findOne({sender: wallet});
+  let paymentsMade = await Payments.findOne({reciever: wallet});
   return {depositsMade, paymentsMade};
 }
 const getDepositsMadeByWallet= ({})=> async wallet => {
@@ -98,6 +99,6 @@ module.exports = dependencies => ({
   deposit: deposit(dependencies),
   getDepositReceipt: getDepositReceipt(dependencies),
   getDepositsMadeByWallet: getDepositsMadeByWallet(dependencies),
-  getDepositsMadeByWallet: getTransactionsMadeByWallet(dependencies),
+  getTransactionsMadeByWallet: getTransactionsMadeByWallet(dependencies),
   sendPayment: sendPayment(dependencies)
 });
