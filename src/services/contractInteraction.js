@@ -84,7 +84,7 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToSend, deploye
   return tx;
 };
 const getDepositReceipt = ({}) => async depositTxHash => {
-  return await Deposit.findOne({transactions: depositTxHash });
+  return await Deposits.findOne({transactions: depositTxHash });
 };
 
 const getTransactionsMadeByWallet= ({})=> async wallet => {
@@ -93,7 +93,7 @@ const getTransactionsMadeByWallet= ({})=> async wallet => {
   return {depositsMade, paymentsMade};
 }
 const getDepositsMadeByWallet= ({})=> async wallet => {
-  return await Deposit.findOne({sender: wallet});
+  return await Deposits.findOne({sender: wallet});
 }
 module.exports = dependencies => ({
   deposit: deposit(dependencies),
