@@ -48,34 +48,14 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
 const sendPayment = ({ config }) => async (receiverWallet, amountToSend, deployerWallet) => {
     const basicPayments = await getContract(config, deployerWallet);
     let amount = await ethers.utils.parseEther(amountToSend).toHexString();
-    const tx = await basicPayments.sendPayment(receiverWallet.address,amount, {gasLimit: 300000});    tx.wait(1).then(
+    const tx = await basicPayments.sendPayment(receiverWallet.address,amount, {gasLimit: 300000});
+      tx.wait(1).then(
       receipt => {  
         console.log("Transaction mined", receiverWallet.address, "\n");
         const firstEvent = receipt && receipt.events && receipt.events[0];
         console.log(firstEvent);
         if (firstEvent && firstEvent.event == "PaymentMade") {
-          if (Payments.findOne({receiver: receiverWallet.address}) !== null){
-            Payments.updateOne(receiverWallet.address, 
-                              {amount: firstEvent.args.amount,
-                              tx: tx.hash,
-                              status: "completed"});
-            return{
-              tx_hash: tx.hash,
-              status: "completed"
-            };
-          }    
-          let data = new Payments({
-            receiver: tx.to,
-            transactions: { amount: firstEvent.args.amount,
-            tx: tx.hash,
-            status: "completed"
-          }
-        }); 
-          Payments.create(data); 
-          return {
-            tx_hash: tx.hash,
-            status: "completed"
-          };
+          return addPaymentToDatabase(receiverWallet, firstEvent.args.amount, tx);
         } else {
           console.error(`Payment not created in tx ${tx.hash}`);
         }
@@ -83,6 +63,32 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToSend, deploye
     );
   return tx;
 };
+
+const addPaymentToDatabase = () => async (receiverWallet, amountToSend, tx) => {
+  if (Payments.findOne({receiver: receiverWallet.address}) !== null){
+    await Payments.updateOne(receiverWallet.address, 
+                      {amount: amountToSend,
+                      tx: tx.hash,
+                      status: "completed"});
+    return{
+      tx_hash: tx.hash,
+      status: "completed"
+    };  
+  }    
+  let data = new Payments({
+    receiver: tx.to,
+    transactions: { amount: amountToSend,
+    tx: tx.hash,
+    status: "completed"
+  }
+}); 
+  await Payments.create(data); 
+  return {
+    tx_hash: tx.hash,
+    status: "completed"
+  };
+};
+
 const getDepositReceipt = ({}) => async depositTxHash => {
   return await Deposits.findOne({transactions: depositTxHash });
 };
@@ -100,5 +106,7 @@ module.exports = dependencies => ({
   getDepositReceipt: getDepositReceipt(dependencies),
   getDepositsMadeByWallet: getDepositsMadeByWallet(dependencies),
   getTransactionsMadeByWallet: getTransactionsMadeByWallet(dependencies),
-  sendPayment: sendPayment(dependencies)
+  sendPayment: sendPayment(dependencies),
+  addPaymentToDatabase : addPaymentToDatabase(dependencies)
+
 });
