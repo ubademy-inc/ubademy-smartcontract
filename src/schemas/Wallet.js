@@ -7,10 +7,10 @@ const walletSchema = new Schema({
     required: true,
     unique: true,
   },
-  address:{
-    type:String,
-    required:true,
-    unique:true,
+  address: {
+    type: String,
+    required: true,
+    unique: true,
   },
   privateKey: {
     type: String,
@@ -21,7 +21,7 @@ const walletSchema = new Schema({
   },
   displayName: {
     type: String,
-    required: true,
+    required: false,
   },
   createdOn: {
     type: Date,

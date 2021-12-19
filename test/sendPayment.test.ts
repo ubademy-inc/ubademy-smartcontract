@@ -4,7 +4,6 @@ import { fixtureDepositMade } from "./common-fixtures";
 import { ContractTransaction } from "ethers";
 import { BasicPayments } from "../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-const walletService = require("../src/services/WalletService");
 const { loadFixture } = waffle;
 
 const { expect } = chai;
@@ -18,7 +17,6 @@ describe(`BasicPayments - Send payments from contract`, function () {
     describe(`GIVEN the Smart Contract was deployed and ${amountToBeReceivedInEthers} ethers were sent`, () => {
       let paymentTx: ContractTransaction;
       let basicPayments: BasicPayments;
-      let wallets: Array<string>
       beforeEach(async function () {
         ({ basicPayments } = await loadFixture(fixture));
       });
@@ -30,7 +28,6 @@ describe(`BasicPayments - Send payments from contract`, function () {
           sender = await ethers.getSigner(senderAddress);
           receiver = await ethers.getSigner(receiverAddress);
           paymentTx = await basicPayments.sendPayment(receiverAddress, amountToBeSent);
-          let wallets = await walletService.getWalletsData();
         });
         it(`THEN the contract decreases its balance in ${amountToBeReceivedInEthers} ethers`, function () {
           return expect(paymentTx).to.changeEtherBalance(basicPayments, amountToBeSent.mul(-1));
@@ -43,9 +40,6 @@ describe(`BasicPayments - Send payments from contract`, function () {
         });
         it(`THEN a PaymentMade event is emited`, function () {
           return expect(paymentTx).to.emit(basicPayments, "PaymentMade").withArgs(receiver.address, amountToBeSent);
-        });
-        it("THEN its stored in database", function (){
-          return expect(wallets).to.be.greaterThan(0);
         });
       });
     });

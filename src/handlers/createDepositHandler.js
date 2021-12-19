@@ -1,17 +1,17 @@
 function schema() {
   return {
-      params: {
-          type: "object",
-          properties: {
-              receiverId: {
-                  type: "integer",
-              },
-              amountInEthers: {
-                  type: "string",
-              },
-          },
+    params: {
+      type: "object",
+      properties: {
+        receiverId: {
+          type: "integer",
+        },
+        amountInEthers: {
+          type: "string",
+        },
       },
-      required: ["sender", "amountInEthers"],
+    },
+    required: ["sender", "amountInEthers"],
   };
 }
 
