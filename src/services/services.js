@@ -1,4 +1,4 @@
-const walletService = require("./wallets");
+const walletService = require("./WalletService");
 const contractInteraction = require("./contractInteraction");
 
 module.exports = ({ config }) => ({

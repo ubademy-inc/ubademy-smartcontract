@@ -4,7 +4,6 @@ import { fixtureDepositMade } from "./common-fixtures";
 import { ContractTransaction } from "ethers";
 import { BasicPayments } from "../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-
 const { loadFixture } = waffle;
 
 const { expect } = chai;
