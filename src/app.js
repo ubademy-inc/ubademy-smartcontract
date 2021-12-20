@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 // const swaggerDocument = require('./swagger.json');
 
 // app.use('/api-docs',
-//   swaggerUi.serve, 
+//   swaggerUi.serve,
 //   swaggerUi.setup(swaggerDocument)
 // );
 // Run the server!
