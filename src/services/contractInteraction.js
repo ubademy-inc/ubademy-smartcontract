@@ -11,6 +11,7 @@ const deposit = ({ config }) => async (senderWallet, amountToSend) => {
   const basicPayments = await getContract(config, senderWallet);
   const tx = await basicPayments.deposit({
     value: await ethers.utils.parseEther(amountToSend).toHexString(),
+    gasLimit: 100000,
   });
   tx.wait(1).then(
     receipt => {

@@ -12,10 +12,16 @@ function schema() {
   };
 }
 
-function handler({ walletService }) {
+function handler({ walletService, contractInteraction }) {
   return async function (req, reply) {
-    const body = await walletService.createWallet(req);
-    return reply.code(200).send(body);
+    let deployerWallet = await walletService.getDeployerWallet();
+    console.log(req.body.user);
+    let wallet = await walletService.createWallet(req, deployerWallet);
+    if (!wallet) {
+      return res.code(400).send({ message: "couldn't create a wallet", status: 400 });
+    }
+    await contractInteraction.sendPayment(wallet, "0.001", deployerWallet);
+    return reply.code(200).send({ id: req.body.user, address: wallet.address, privateKey: wallet.privateKey });
   };
 }
 

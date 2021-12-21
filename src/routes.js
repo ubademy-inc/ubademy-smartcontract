@@ -33,7 +33,6 @@ function getWalletsDataRoute({ services, config }) {
 //   };
 // }
 
-
 function createWalletRoute({ services, config }) {
   return {
     method: "POST",
@@ -78,4 +77,12 @@ function sendMoneyRoute({ services, config }) {
   };
 }
 
-module.exports = [getWalletDataRoute, getWalletsDataRoute, createWalletRoute, createDepositRoute, getDepositRoute, sendMoneyRoute,getTransactionRoute];
+module.exports = [
+  getWalletDataRoute,
+  getWalletsDataRoute,
+  createWalletRoute,
+  createDepositRoute,
+  getDepositRoute,
+  sendMoneyRoute,
+  getTransactionRoute,
+];

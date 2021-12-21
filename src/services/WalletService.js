@@ -1,5 +1,6 @@
 const ethers = require("ethers");
 const Wallet = require("../schemas/Wallet");
+const contract = require("../services/contractInteraction");
 
 const getDeployerWallet = ({ config }) => () => {
   const provider = new ethers.providers.InfuraProvider(config.network, config.infuraApiKey);
@@ -21,11 +22,7 @@ const createWallet = (req, res) => async req => {
     isAdmin: req.body.isAdmin,
   });
   await Wallet.create(walletToSave);
-  return {
-    id: req.body.user,
-    address: wallet.address,
-    privateKey: wallet.privateKey,
-  };
+  return wallet;
 };
 
 const getWalletsData = () => async () => {
@@ -38,8 +35,10 @@ const getWalletData = () => async user => {
 };
 
 const getWallet = ({}) => async user => {
+  console.log(user);
   const provider = new ethers.providers.InfuraProvider("kovan", process.env.INFURA_API_KEY);
   let obtenerwallet = await Wallet.findOne({ user: user });
+  console.log("Billetera", obtenerwallet);
   return new ethers.Wallet(obtenerwallet.privateKey, provider);
 };
 
