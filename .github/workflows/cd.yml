@@ -23,14 +23,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       # solves issue https://github.com/actions/setup-node/issues/214
       - name: Reconfigure git to use HTTP authentication
-        run: >
-          git config --global url."https://github.com/".insteadOf
-          ssh://git@github.com/
-      - run: npm i
-      - name: Deploy
         env:
           INFURA_API_KEY: ${{secrets.INFURA_API_KEY}}
           MNEMONIC: ${{secrets.MNEMONIC}}
+        run: >
+          git config --global url."https://github.com/".insteadOf
+          ssh://git@github.com/
+      - run: npm ci
+      - name: Deploy
         run: npm run deploy-kovan
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
         uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
