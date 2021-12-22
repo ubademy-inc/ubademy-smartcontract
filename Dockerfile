@@ -1,5 +1,6 @@
 FROM node:14
 
+COPY . /usr/src/app
 # Create app directory
 WORKDIR /usr/src/app
 
