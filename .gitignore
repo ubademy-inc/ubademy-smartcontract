@@ -2,6 +2,7 @@
 .coverage_artifacts/
 .coverage_cache/
 .coverage_contracts/
+.idea/
 artifacts/
 build/
 cache/
@@ -15,6 +16,8 @@ docs/
 deployments/
 # files
 *.env
+.env
+.env.*
 *.log
 *.tsbuildinfo
 coverage.json
