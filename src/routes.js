@@ -5,6 +5,7 @@ const createWallet = require("./handlers/createWalletHandler");
 const createDeposit = require("./handlers/createDepositHandler");
 const getDeposit = require("./handlers/getDepositHandler");
 const getTransactions = require("./handlers/getTransactionsHandler");
+const changeSubscription = require("./handlers/changeSubscriptionHandler");
 
 function getWalletDataRoute({ services, config }) {
   return {
@@ -12,6 +13,14 @@ function getWalletDataRoute({ services, config }) {
     url: "/wallet/:id",
     schema: getWalletData.schema(config),
     handler: getWalletData.handler({ config, ...services }),
+  };
+}
+function changeSubscriptionRoute({ services, config }) {
+  return {
+    method: "POST",
+    url: "/changesusc",
+    schema: changeSubscription.schema(config),
+    handler: changeSubscription.handler({ config, ...services }),
   };
 }
 
@@ -23,15 +32,6 @@ function getWalletsDataRoute({ services, config }) {
     handler: getWalletsData.handler({ config, ...services }),
   };
 }
-
-// function getWalletsFromUsersRoute({ services, config }) {
-//   return {
-//     method: "GET",
-//     url: "/https://ubademy-grupo-13-usuarios.herokuapp.com/api/users/detail",
-//     schema: getWalletsData.schema(config),
-//     handler: getWalletsData.handler({ config, ...services }),
-//   };
-// }
 
 function createWalletRoute({ services, config }) {
   return {
@@ -85,4 +85,5 @@ module.exports = [
   getDepositRoute,
   sendMoneyRoute,
   getTransactionRoute,
+  changeSubscriptionRoute,
 ];
