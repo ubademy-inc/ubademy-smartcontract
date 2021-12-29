@@ -17,7 +17,7 @@ function schema() {
     required: ["sender", "amountInEthers"],
   };
 }
-var subscriptions = { 0: 0, 1: 0.00000011, 2: 0.00000012, 3: 0.00000013 };
+var subscriptions = { 0: 0, 1: 0.00011, 2: 0.00012, 3: 0.00013 };
 
 function handler({ contractInteraction, walletService }) {
   return async function (req, reply) {
