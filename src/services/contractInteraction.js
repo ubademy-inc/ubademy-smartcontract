@@ -66,17 +66,17 @@ const sendPayment = ({ config }) => async (receiverWallet, amountToSend, deploye
   return tx;
 };
 
-async function addPaymentToDatabase(receiverWallet, amountToSend, tx) {
-  console.log();
+ async function addPaymentToDatabase(receiverWallet, amountToSend, txr) {
+  console.log("Reciever", receiverWallet, "\n amount: ", amountToSend, "txr: \n", txr);
   let newPayment = await Payments.create({
     receiver: receiverWallet.address,
     amount: amountToSend,
-    tx: tx.hash,
+    tx: txr.hash,
     status: "completed",
   });
   console.log(newPayment, "\n");
   return {
-    tx_hash: tx.hash,
+    tx_hash: txr.hash,
     status: "completed",
   };
 }
