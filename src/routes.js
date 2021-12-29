@@ -34,13 +34,6 @@ function getWalletsDataRoute({ services, config }) {
 }
 
 function createWalletRoute({ services, config }) {
-  console.log(
-    "******************************************\n",
-    "BODY: ",
-    config, services,
-    "\n",
-    "******************************************\n",
-  );
   return {
     method: "POST",
     url: "/wallet",

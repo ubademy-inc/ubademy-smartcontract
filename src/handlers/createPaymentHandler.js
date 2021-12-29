@@ -22,6 +22,7 @@ function handler({ contractInteraction, walletService }) {
       return res.code(400).send({ message: "user does not have a wallet", status: 400 });
     }
     let deployerWallet = await walletService.getDeployerWallet();
+    console.log(deployerWallet);
     return contractInteraction.sendPayment(wallet, req.body.amountInEthers, deployerWallet);
   };
 }
